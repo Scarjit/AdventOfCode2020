@@ -16,7 +16,7 @@ pub(crate) fn read_input(day: i32) -> Result<Vec<String>, std::io::Error> {
         day
     ))?
     .split('\n')
-    .map(|c| String::from(c))
+    .map(String::from)
     .collect())
 }
 

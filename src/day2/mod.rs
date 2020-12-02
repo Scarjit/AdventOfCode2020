@@ -22,7 +22,7 @@ impl Password {
             return true;
         }
 
-        return false;
+        false
     }
 
     fn validate_part_2(&self) -> bool {
@@ -53,7 +53,7 @@ impl Password {
             return true;
         }
 
-        return false;
+        false
     }
 }
 
