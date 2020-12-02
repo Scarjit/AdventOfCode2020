@@ -1,5 +1,3 @@
-use std::io::BufRead;
-
 #[derive(Debug)]
 pub struct Password {
     pub password: String,
