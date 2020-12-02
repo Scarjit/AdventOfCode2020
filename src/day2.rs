@@ -20,15 +20,13 @@ pub fn input_generator(input: &str) -> Vec<Password> {
 
                 let password = splits.get(1).unwrap().trim();
                 let policy_splits = splits.get(0).unwrap().split(' ').collect::<Vec<&str>>();
-
                 let policy_char = policy_splits.get(1).unwrap();
-                let policy_amount_splits = policy_splits
+                let mut policy_amount_splits = policy_splits
                     .get(0)
                     .unwrap()
-                    .split('-')
-                    .collect::<Vec<&str>>();
-                let min = policy_amount_splits.get(0).unwrap();
-                let max = policy_amount_splits.get(1).unwrap();
+                    .split('-');
+                let min = policy_amount_splits.next().unwrap();
+                let max = policy_amount_splits.next().unwrap();
 
                 Some(Password {
                     password: password.to_string(),
