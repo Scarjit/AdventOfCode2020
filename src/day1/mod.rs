@@ -15,8 +15,7 @@ impl RunnableDay for Day1 {
         //Part 1
         for i in 0..numbers.len() {
             let n_current = numbers[i];
-            for i2 in numbers.iter().skip(i) {
-                let n_current_2 = numbers[*i2 as usize];
+            for n_current_2 in numbers.iter().skip(i) {
                 let nx = n_current + n_current_2;
                 if nx == 2020 {
                     println!(
@@ -37,8 +36,7 @@ impl RunnableDay for Day1 {
                 let n_current_2 = numbers[i2];
                 let nx = n_current + n_current_2;
                 if nx <= 2020 {
-                    for i3 in numbers.iter().skip(i2) {
-                        let n_current_3 = numbers[*i3 as usize];
+                    for n_current_3 in numbers.iter().skip(i2) {
                         let ixx = nx + n_current_3;
                         if ixx == 2020 {
                             println!(
