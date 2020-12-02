@@ -12,8 +12,7 @@ pub fn solve_part1(numbers: &[i32]) -> i32 {
     for i in 0..numbers.len() {
         let n_current = numbers[i];
         for n_current_2 in numbers.iter().skip(i) {
-            let nx = n_current + n_current_2;
-            if nx == 2020 {
+            if n_current + n_current_2 == 2020 {
                 return n_current * n_current_2;
             }
         }
@@ -30,8 +29,7 @@ pub fn solve_part2(numbers: &[i32]) -> i32 {
             let nx = n_current + n_current_2;
             if nx <= 2020 {
                 for n_current_3 in numbers.iter().skip(i2) {
-                    let ixx = nx + n_current_3;
-                    if ixx == 2020 {
+                    if nx + n_current_3 == 2020 {
                         return n_current * n_current_2 * n_current_3;
                     }
                 }
