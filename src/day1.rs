@@ -33,6 +33,8 @@ pub fn solve_part2(numbers: &[i32]) -> i32 {
                         return n_current * n_current_2 * n_current_3;
                     }
                 }
+            }else{
+                continue
             }
         }
     }
