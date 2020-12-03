@@ -1,15 +1,13 @@
 #[aoc_generator(day1)]
-pub fn input_generator(input: &str) -> Vec<i32> {
-    let inp = input
-        .split('\n')
-        .filter(|p| !p.is_empty())
-        .map(|c| c.parse().expect("Couldn't parse number"))
-        .collect::<Vec<i32>>();
-    inp
+pub fn input_generator(input: &str) -> Vec<u32> {
+    input
+        .lines()
+        .map(|line| line.parse::<u32>().unwrap())
+        .collect()
 }
 
 #[aoc(day1, part1)]
-pub fn solve_part1(numbers: &[i32]) -> i32 {
+pub fn solve_part1(numbers: &[u32]) -> u32 {
     for i in 0..numbers.len() {
         let n_current = numbers[i];
         for n_current_2 in numbers.iter().skip(i) {
@@ -22,7 +20,7 @@ pub fn solve_part1(numbers: &[i32]) -> i32 {
 }
 
 #[aoc(day1, part2)]
-pub fn solve_part2(numbers: &[i32]) -> i32 {
+pub fn solve_part2(numbers: &[u32]) -> u32 {
     let max_v = 2020 - numbers.iter().min().unwrap();
     for i in 0..numbers.len() {
         let n_current = numbers[i];
@@ -42,3 +40,5 @@ pub fn solve_part2(numbers: &[i32]) -> i32 {
     }
     panic!()
 }
+
+
