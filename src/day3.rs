@@ -7,6 +7,7 @@ enum Square {
     Field,
 }
 impl Square {
+    #[inline]
     pub fn from_char(c: char) -> Self {
         match c {
             '.' => Self::Field,
@@ -28,6 +29,7 @@ struct Forest {
 }
 
 impl Forest {
+    #[inline]
     pub fn square_at(&self, x: usize, y: usize) -> Option<Square> {
         self.squares
             .get(y)
@@ -35,6 +37,7 @@ impl Forest {
             .map(|o_sqr| o_sqr.copied())
             .flatten()
     }
+    #[inline]
     pub fn travel_slope(&self, slope: Slope) -> Vec<Square> {
         let (mut x, mut y) = (0, 0);
         let mut path = Vec::with_capacity(324);
