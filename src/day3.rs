@@ -1,10 +1,7 @@
-use crate::day3::Square::Tree;
-use smallvec::{SmallVec, smallvec};
-
 #[derive(Debug, Copy, Clone, PartialOrd, PartialEq)]
 enum Square {
-    Tree,
-    Field,
+    Field = 0,
+    Tree = 1,
 }
 impl Square {
     #[inline]
@@ -38,15 +35,15 @@ impl Forest {
             .flatten()
     }
     #[inline]
-    pub fn travel_slope(&self, slope: Slope) -> Vec<Square> {
+    pub fn travel_slope(&self, slope: Slope) -> usize {
         let (mut x, mut y) = (0, 0);
-        let mut path = Vec::with_capacity(324);
+        let mut n = 0;
         while let Some(square) = self.square_at(x, y) {
-            path.push(square);
+            n += square as usize;
             x += slope.right;
             y += slope.down;
         }
-        path
+        return n;
     }
 }
 
@@ -62,17 +59,13 @@ fn input_generator(input: &str) -> Forest {
 
 #[aoc(day3, part1)]
 fn solve_part_1(input: &Forest) -> usize {
-    input
-        .travel_slope(Slope { right: 3, down: 1 })
-        .iter()
-        .filter(|sqr| sqr == &&Tree)
-        .count()
+    input.travel_slope(Slope{right: 3, down: 1})
 }
 
 
 #[aoc(day3, part2)]
 fn solve_part_2(input: &Forest) -> usize{
-    let slopes = vec![
+    let slopes = [
         Slope{right:1,down:1},
         Slope{right:3,down:1},
         Slope{right:5,down:1},
@@ -84,8 +77,5 @@ fn solve_part_2(input: &Forest) -> usize{
         .iter()
         .map(|slope| {
             input.travel_slope(*slope)
-                .iter()
-                .filter(|sqr| sqr == &&Tree)
-                .count()
         }).product()
 }
