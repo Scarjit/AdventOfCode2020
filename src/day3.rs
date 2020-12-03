@@ -1,3 +1,5 @@
+use stackvec::TryCollect;
+
 #[derive(Debug, Copy, Clone, PartialOrd, PartialEq)]
 enum Square {
     Field = 0,
@@ -22,7 +24,7 @@ struct Slope {
 
 #[derive(Debug)]
 struct Forest {
-    squares: Vec<Vec<Square>>,
+    squares: [[Square;31];323]
 }
 
 impl Forest {
@@ -49,11 +51,10 @@ impl Forest {
 
 #[aoc_generator(day3)]
 fn input_generator(input: &str) -> Forest {
-    Forest {
-        squares: input
-            .lines()
-            .map(|l| l.chars().map(|c| Square::from_char(c)).collect())
-            .collect(),
+    Forest { squares: input
+        .lines()
+        .map(|l| l.chars().map(|c| Square::from_char(c)).try_collect().unwrap())
+        .try_collect().unwrap()
     }
 }
 
@@ -79,3 +80,4 @@ fn solve_part_2(input: &Forest) -> usize{
             input.travel_slope(*slope)
         }).product()
 }
+
