@@ -8,7 +8,7 @@ pub fn input_generator(input: &str) -> Vec<u32> {
 
 fn find_2020_set(mut numbers: Vec<u32>) -> Option<(u32, u32)> {
     let (mut l_value, mut r_value) = (0, numbers.len() - 1);
-    numbers.sort();
+    numbers.sort_unstable();
     while l_value < r_value {
         match (numbers[l_value], numbers[r_value]) {
             (a, b) if a + b == 2020 => return Some((a, b)),
