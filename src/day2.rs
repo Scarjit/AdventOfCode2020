@@ -1,92 +1,49 @@
-#[derive(Debug)]
-pub struct Password {
-    pub password: String,
+type Password = String;
+
+#[derive(Debug, PartialOrd, PartialEq)]
+pub struct PassPolicy {
     pub policy_char: char,
-    pub policy_min: u32,
-    pub policy_max: u32,
+    pub policy_min: usize,
+    pub policy_max: usize,
 }
+
 #[aoc_generator(day2)]
-pub fn input_generator(input: &str) -> Vec<Password> {
+pub fn input_generator(input: &str) -> Vec<(PassPolicy, Password)> {
     input
-        .split('\n')
-        .filter_map(|f| {
-            return if f.is_empty() {
-                None
-            } else {
-                let splits = f.split(':').collect::<Vec<&str>>();
-
-                let password = splits.get(1).unwrap().trim();
-                let policy_splits = splits.get(0).unwrap().split(' ').collect::<Vec<&str>>();
-                let policy_char = policy_splits.get(1).unwrap();
-                let mut policy_amount_splits = policy_splits
-                    .get(0)
-                    .unwrap()
-                    .split('-');
-                let min = policy_amount_splits.next().unwrap();
-                let max = policy_amount_splits.next().unwrap();
-
-                Some(Password {
-                    password: password.to_string(),
-                    policy_char: policy_char.chars().next().unwrap(),
-                    policy_min: min.parse().unwrap(),
-                    policy_max: max.parse().unwrap(),
-                })
+        .lines()
+        .map(|line| {
+            let splits = line
+                .split(|c| c == ' ' || c == '-' || c == ':')
+                .collect::<Vec<&str>>();
+            let pass_policy = PassPolicy {
+                policy_min: splits.get(0).unwrap().parse().unwrap(),
+                policy_max: splits.get(1).unwrap().parse().unwrap(),
+                policy_char: splits.get(2).unwrap().parse().unwrap(),
             };
+            (pass_policy, splits.last().unwrap().to_string())
         })
         .collect()
 }
 
 #[aoc(day2, part1)]
-pub fn solve_part1(passwords: &[Password]) -> usize {
-    passwords
-        .iter()
-        .filter(|p| {
-            let mut chars_found = 0;
-            for c in p.password.chars() {
-                if c == p.policy_char {
-                    chars_found += 1;
-                }
-            }
-            if chars_found >= p.policy_min && chars_found <= p.policy_max {
-                return true;
-            }
-
-            false
+pub fn solve_part1_alt(inp: &[(PassPolicy, Password)]) -> usize {
+    inp.iter()
+        .filter(|(pol, pass)| {
+            let n = pass.chars().filter(|c| *c == pol.policy_char).count();
+            n >= pol.policy_min && n <= pol.policy_max
         })
-        .collect::<Vec<&Password>>()
-        .len()
+        .count()
 }
 
 #[aoc(day2, part2)]
-pub fn solve_part2(passwords: &[Password]) -> usize {
+pub fn solve_part2(passwords: &[(PassPolicy, Password)]) -> usize {
     passwords
         .iter()
-        .filter(|p| {
-            let char_vec = p.password.chars().collect::<Vec<char>>();
-            let mut found = 0;
-            match char_vec.get((p.policy_min - 1) as usize) {
-                Some(v) => {
-                    if v == &p.policy_char {
-                        found += 1;
-                    }
-                }
-                _ => {
-                    return false;
-                }
-            }
-            match char_vec.get((p.policy_max - 1) as usize) {
-                Some(v) => {
-                    if v == &p.policy_char {
-                        found += 1;
-                    }
-                }
-                _ => {
-                    return false;
-                }
-            }
-
-            found == 1
+        .filter(|(pol, pass)| {
+            let chars = pass.chars().collect::<Vec<char>>();
+            let is_first_set = chars.get(pol.policy_min - 1).unwrap() == &pol.policy_char;
+            let is_second_set = chars.get(pol.policy_max - 1).unwrap() == &pol.policy_char;
+            is_first_set ^ is_second_set
         })
-        .collect::<Vec<&Password>>()
-        .len()
+        .count()
 }
