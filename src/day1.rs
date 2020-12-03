@@ -6,17 +6,23 @@ pub fn input_generator(input: &str) -> Vec<u32> {
         .collect()
 }
 
-#[aoc(day1, part1)]
-pub fn solve_part1(numbers: &[u32]) -> u32 {
-    for i in 0..numbers.len() {
-        let n_current = numbers[i];
-        for n_current_2 in numbers.iter().skip(i) {
-            if n_current + n_current_2 == 2020 {
-                return n_current * n_current_2;
-            }
+fn find_2020_set(mut numbers: Vec<u32>) -> Option<(u32, u32)> {
+    let (mut l_value, mut r_value) = (0, numbers.len() - 1);
+    numbers.sort();
+    while l_value < r_value {
+        match (numbers[l_value], numbers[r_value]) {
+            (a, b) if a + b == 2020 => return Some((a, b)),
+            (a, b) if a + b < 2020 => l_value += 1,
+            _ => r_value -= 1,
         }
     }
-    panic!()
+    None
+}
+
+#[aoc(day1, part1)]
+pub fn solve_part_1(numbers: &[u32]) -> u32 {
+    let (a, b) = find_2020_set(numbers.to_vec()).unwrap();
+    a * b
 }
 
 #[aoc(day1, part2)]
@@ -33,12 +39,8 @@ pub fn solve_part2(numbers: &[u32]) -> u32 {
                         return n_current * n_current_2 * n_current_3;
                     }
                 }
-            } else {
-                continue;
             }
         }
     }
     panic!()
 }
-
-
