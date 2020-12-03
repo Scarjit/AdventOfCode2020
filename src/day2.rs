@@ -26,7 +26,7 @@ pub fn input_generator(input: &str) -> Vec<(PassPolicy, Password)> {
 }
 
 #[aoc(day2, part1)]
-pub fn solve_part1_alt(inp: &[(PassPolicy, Password)]) -> usize {
+pub fn solve_part1(inp: &[(PassPolicy, Password)]) -> usize {
     inp.iter()
         .filter(|(pol, pass)| {
             let n = pass.chars().filter(|c| *c == pol.policy_char).count();
@@ -36,7 +36,7 @@ pub fn solve_part1_alt(inp: &[(PassPolicy, Password)]) -> usize {
 }
 
 #[aoc(day2, part2)]
-pub fn solve_part2(passwords: &[(PassPolicy, Password)]) -> usize {
+pub fn solve_part_2(passwords: &[(PassPolicy, Password)]) -> usize {
     passwords
         .iter()
         .filter(|(pol, pass)| {

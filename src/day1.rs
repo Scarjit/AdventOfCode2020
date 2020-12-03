@@ -26,7 +26,7 @@ pub fn solve_part_1(numbers: &[u32]) -> u32 {
 }
 
 #[aoc(day1, part2)]
-pub fn solve_part2(numbers: &[u32]) -> u32 {
+pub fn solve_part_2(numbers: &[u32]) -> u32 {
     let max_v = 2020 - numbers.iter().min().unwrap();
     for i in 0..numbers.len() {
         let n_current = numbers[i];
