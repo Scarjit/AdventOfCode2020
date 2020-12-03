@@ -24,7 +24,7 @@ struct Slope {
 
 #[derive(Debug)]
 struct Forest {
-    squares: [[Square;31];323]
+    squares: [[Square; 31]; 323],
 }
 
 impl Forest {
@@ -38,8 +38,7 @@ impl Forest {
     }
     #[inline]
     pub fn travel_slope(&self, slope: Slope) -> usize {
-        let (mut x, mut y) = (0, 0);
-        let mut n = 0;
+        let (mut x, mut y, mut n) = (0, 0, 0);
         while let Some(square) = self.square_at(x, y) {
             n += square as usize;
             x += slope.right;
@@ -51,33 +50,37 @@ impl Forest {
 
 #[aoc_generator(day3)]
 fn input_generator(input: &str) -> Forest {
-    Forest { squares: input
-        .lines()
-        .map(|l| l.chars().map(|c| Square::from_char(c)).try_collect().unwrap())
-        .try_collect().unwrap()
+    Forest {
+        squares: input
+            .lines()
+            .map(|l| {
+                l.chars()
+                    .map(|c| Square::from_char(c))
+                    .try_collect()
+                    .unwrap()
+            })
+            .try_collect()
+            .unwrap(),
     }
 }
 
 #[aoc(day3, part1)]
 fn solve_part_1(input: &Forest) -> usize {
-    input.travel_slope(Slope{right: 3, down: 1})
+    input.travel_slope(Slope { right: 3, down: 1 })
 }
 
-
 #[aoc(day3, part2)]
-fn solve_part_2(input: &Forest) -> usize{
+fn solve_part_2(input: &Forest) -> usize {
     let slopes = [
-        Slope{right:1,down:1},
-        Slope{right:3,down:1},
-        Slope{right:5,down:1},
-        Slope{right:7,down:1},
-        Slope{right:1,down:2},
+        Slope { right: 1, down: 1 },
+        Slope { right: 3, down: 1 },
+        Slope { right: 5, down: 1 },
+        Slope { right: 7, down: 1 },
+        Slope { right: 1, down: 2 },
     ];
 
     slopes
         .iter()
-        .map(|slope| {
-            input.travel_slope(*slope)
-        }).product()
+        .map(|slope| input.travel_slope(*slope))
+        .product()
 }
-
