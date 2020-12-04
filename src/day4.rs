@@ -70,8 +70,7 @@ impl Passport {
         let mut passport: Passport = Passport::default();
         let invec = inp
             .split(|c| c == '\n' || c == ' ')
-            .map(|s| s.split(':').try_collect::<[&str;2]>().unwrap())
-            .collect::<Vec<[&str;2]>>();
+            .map(|s| s.split(':').try_collect::<[&str;2]>().unwrap());
 
         for sx in invec {
             match sx[0] {
