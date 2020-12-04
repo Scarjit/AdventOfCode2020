@@ -9,5 +9,16 @@ edition = "2018"
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
 rayon = "1.5.0"
-smallvec = "1.5.0"
 stackvec = "0.2.1"
+hex = "0.4.2"
+
+[profile.release]
+opt-level=3
+debug=false
+debug-assertions=false
+overflow-checks=false
+lto=true
+panic="abort"
+incremental=false
+codegen-units=1
+rpath=false
