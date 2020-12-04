@@ -1,3 +1,5 @@
+use stackvec::TryCollect;
+
 #[derive(Debug, Clone)]
 pub enum Height {
     Centimeter(u32),
@@ -68,8 +70,8 @@ impl Passport {
         let mut passport: Passport = Passport::default();
         let invec = inp
             .split(|c| c == '\n' || c == ' ')
-            .map(|s| s.split(':').collect::<Vec<&str>>())
-            .collect::<Vec<Vec<&str>>>();
+            .map(|s| s.split(':').try_collect::<[&str;2]>().unwrap())
+            .collect::<Vec<[&str;2]>>();
 
         for sx in invec {
             match sx[0] {
