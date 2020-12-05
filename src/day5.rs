@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
@@ -20,7 +21,7 @@ impl BoardingPass {
         slice.chars().enumerate().fold(max, |curr, (i, c)| match c {
             'F' | 'L' => curr - 2usize.pow((slice.len() - i - 1) as u32),
             'B' | 'R' => curr,
-            _ => panic!("Invalid BoardingPass"),
+            _ => panic!("Invalid BoardingPass {}", c),
         })
     }
 }
@@ -31,12 +32,12 @@ pub fn input_generator(input: &str) -> Vec<BoardingPass> {
 }
 
 #[aoc(day5, part1)]
-fn solve_part_1(input: &Vec<BoardingPass>) -> usize {
+pub fn solve_part_1(input: &Vec<BoardingPass>) -> usize {
     input.iter().map(|bpass| bpass.id).max().unwrap()
 }
 
 #[aoc(day5, part2)]
-fn solve_part_2(input: &Vec<BoardingPass>) -> usize {
+pub fn solve_part_2(input: &Vec<BoardingPass>) -> usize {
     let mut ids = input.iter().map(|bpass| bpass.id).collect::<Vec<usize>>();
 
     ids.sort_unstable();
@@ -51,7 +52,7 @@ fn solve_part_2(input: &Vec<BoardingPass>) -> usize {
 }
 
 #[aoc(day5, part2, using_hashset)]
-fn solve_part_2_hashset(input: &Vec<BoardingPass>) -> usize {
+pub fn solve_part_2_hashset(input: &Vec<BoardingPass>) -> usize {
     let mut ids = input.iter().map(|bpass| bpass.id).collect::<Vec<usize>>();
 
     ids.sort_unstable();
