@@ -1,3 +1,6 @@
+use std::collections::HashSet;
+use std::iter::FromIterator;
+
 #[derive(Debug)]
 pub struct BoardingPass {
     pub row: usize,
@@ -16,7 +19,8 @@ impl BoardingPass {
     fn decode_slice(slice: &str, max: usize) -> usize {
         slice.chars().enumerate().fold(max, |curr, (i, c)| match c {
             'F' | 'L' => curr - 2usize.pow((slice.len() - i - 1) as u32),
-            _ => curr,
+            'B' | 'R' => curr,
+            _ => panic!("Invalid BoardingPass"),
         })
     }
 }
@@ -40,6 +44,22 @@ fn solve_part_2(input: &Vec<BoardingPass>) -> usize {
     let max_id = *ids.last().unwrap();
     for id in min_id..max_id {
         if !ids.contains(&id) {
+            return id;
+        }
+    }
+    panic!()
+}
+
+#[aoc(day5, part2, using_hashset)]
+fn solve_part_2_hashset(input: &Vec<BoardingPass>) -> usize {
+    let mut ids = input.iter().map(|bpass| bpass.id).collect::<Vec<usize>>();
+
+    ids.sort_unstable();
+    let min_id = *ids.first().unwrap();
+    let max_id = *ids.last().unwrap();
+    let idset: HashSet<usize> = HashSet::from_iter(ids);
+    for id in min_id..max_id {
+        if !idset.contains(&id) {
             return id;
         }
     }
