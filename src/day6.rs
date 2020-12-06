@@ -1,0 +1,48 @@
+use std::collections::HashMap;
+use std::str::FromStr;
+
+#[derive(Debug)]
+pub struct CustomsForm {
+    pub groupsize: usize,
+    pub answers: HashMap<char, usize>,
+}
+
+impl FromStr for CustomsForm {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self {
+            groupsize: s.lines().count(),
+            answers: s
+                .chars()
+                .filter(|c| c.is_alphabetic())
+                .fold(HashMap::new(), |mut map, c| {
+                    if let Some(cnt) = map.get_mut(&c) {
+                        *cnt += 1;
+                    } else {
+                        map.insert(c, 1);
+                    }
+                    map
+                }),
+        })
+    }
+}
+
+impl CustomsForm {
+    pub fn answered_by_any(&self) -> usize {
+        self.answers.len()
+    }
+}
+
+#[aoc_generator(day6)]
+pub fn input_generator(input: &str) -> Vec<CustomsForm> {
+    input
+        .split("\n\n")
+        .map(|l| l.parse::<CustomsForm>().unwrap())
+        .collect()
+}
+
+#[aoc(day6, part1)]
+pub fn solve_part_1(input: &Vec<CustomsForm>) -> usize {
+    input.iter().map(|cform| cform.answered_by_any()).sum()
+}
