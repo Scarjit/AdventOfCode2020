@@ -29,9 +29,11 @@ impl FromStr for CustomsForm {
 }
 
 impl CustomsForm {
+    #[inline]
     pub fn answered_by_any(&self) -> usize {
         self.answers.len()
     }
+    #[inline]
     pub fn answered_by_all(&self) -> usize {
         self.answers
             .values()
