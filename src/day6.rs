@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct CustomsForm {
-    pub groupsize: usize,
+    pub group_size: usize,
     pub answers: HashMap<char, usize>,
 }
 
@@ -12,7 +12,7 @@ impl FromStr for CustomsForm {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self {
-            groupsize: s.lines().count(),
+            group_size: s.lines().count(),
             answers: s
                 .chars()
                 .filter(|c| c.is_alphabetic())
@@ -32,6 +32,12 @@ impl CustomsForm {
     pub fn answered_by_any(&self) -> usize {
         self.answers.len()
     }
+    pub fn answered_by_all(&self) -> usize {
+        self.answers
+            .values()
+            .filter(|v| v == &&self.group_size)
+            .count()
+    }
 }
 
 #[aoc_generator(day6)]
@@ -45,4 +51,9 @@ pub fn input_generator(input: &str) -> Vec<CustomsForm> {
 #[aoc(day6, part1)]
 pub fn solve_part_1(input: &Vec<CustomsForm>) -> usize {
     input.iter().map(|cform| cform.answered_by_any()).sum()
+}
+
+#[aoc(day6, part2)]
+pub fn solve_part_2(input: &Vec<CustomsForm>) -> usize {
+    input.iter().map(|cform| cform.answered_by_all()).sum()
 }
