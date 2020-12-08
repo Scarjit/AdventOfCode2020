@@ -33,8 +33,7 @@ pub fn input_generator(input: &str) -> HashMap<String, Vec<InnerBag>> {
 }
 
 fn sort_rev(bags: &Bags) -> Vec<&str> {
-    let mut sorted = topological_sort(
-        &bags.keys().map(|b| b.as_str()).collect::<Vec<_>>(), |&c| {
+    let mut sorted = topological_sort(&bags.keys().map(|b| b.as_str()).collect::<Vec<_>>(), |&c| {
         bags[c].iter().map(|d| d.name.as_str())
     })
     .unwrap();
@@ -61,7 +60,6 @@ pub fn solve_part_1(input: &Bags) -> usize {
 
 #[aoc(day7, part2)]
 pub fn solve_part_2(input: &Bags) -> usize {
-
     let mut contains: HashMap<&str, HashMap<&str, usize>> = HashMap::new();
     for c in sort_rev(input).into_iter() {
         let mut inside = HashMap::new();
