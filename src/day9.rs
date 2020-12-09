@@ -1,6 +1,3 @@
-use itertools;
-use itertools::Itertools;
-
 const PREAMBLE_LENGTH: usize = 25;
 
 fn find_x_set(mut numbers: Vec<usize>, search_val: usize) -> Option<(usize, usize)> {
@@ -46,6 +43,27 @@ impl XMASData {
         }
         0
     }
+
+    pub fn check_weakness(&mut self, search_val: usize) -> usize{
+        let numbers = &self.data;
+        let mut window_low: usize = 0;
+        let mut window_high: usize = 1;
+        let mut current_sum: usize = numbers[window_low] + numbers[window_high];
+        while window_high < numbers.len() {
+            if current_sum == search_val {
+                let range = &numbers[window_low..=window_high];
+                return range.iter().min().unwrap() + range.iter().max().unwrap();
+            } else if current_sum < search_val || window_high == window_low + 1 {
+                window_high += 1;
+                current_sum += numbers[window_high];
+            } else {
+                current_sum -= numbers[window_low];
+                window_low += 1;
+            }
+        }
+
+        panic!("No weakness found")
+    }
 }
 
 #[aoc_generator(day9)]
@@ -65,8 +83,8 @@ pub fn solve_part_1(input: &XMASData) -> usize {
 }
 
 #[aoc(day9, part2)]
-pub fn solve_part_2(input: &XMASData) -> isize {
+pub fn solve_part_2(input: &XMASData) -> usize {
     let mut input_clone = input.clone();
-    let x = input_clone.check_seq_validity();
-    0
+    let search_n = input_clone.check_seq_validity();
+    input_clone.check_weakness(search_n)
 }
