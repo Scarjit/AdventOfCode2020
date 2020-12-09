@@ -1,7 +1,7 @@
+use rayon::prelude::*;
 use stackvec::TryCollect;
 use std::collections::HashMap;
 use std::str::FromStr;
-use rayon::prelude::*;
 
 #[derive(Debug, Clone, PartialOrd, PartialEq)]
 pub enum Instructions {
@@ -117,40 +117,43 @@ pub fn solve_part_2(input: &Program) -> isize {
     panic!()
 }
 
-
 #[aoc(day8, part2, rayon)]
 pub fn solve_part_2_rayon(input: &Program) -> isize {
     let mut prg = input.clone();
     prg.run_program();
 
-    let x = prg.trace.iter().filter(|f|{
-       match f.1 {
-           Instructions::ACC(_) => {
-               false
-           }
-           _ => {true}
-       }
-    }).collect::<Vec<(&usize, &Instructions)>>().into_par_iter().filter_map(|t|{
-        let new_instruction = match t.1 {
-            Instructions::JMP(i) => Instructions::NOP(*i),
-            Instructions::NOP(i) => Instructions::JMP(*i),
-            _ => {panic!()},
-        };
+    let x = prg
+        .trace
+        .iter()
+        .filter(|f| match f.1 {
+            Instructions::ACC(_) => false,
+            _ => true,
+        })
+        .collect::<Vec<(&usize, &Instructions)>>()
+        .into_par_iter()
+        .filter_map(|t| {
+            let new_instruction = match t.1 {
+                Instructions::JMP(i) => Instructions::NOP(*i),
+                Instructions::NOP(i) => Instructions::JMP(*i),
+                _ => {
+                    panic!()
+                }
+            };
 
-        let mut p_clone = prg.clone();
-        p_clone.trace.clear();
-        p_clone.current_pointer = 0;
-        p_clone.accumulator = 0;
-        p_clone.instructions[*t.0] = new_instruction;
+            let mut p_clone = prg.clone();
+            p_clone.trace.clear();
+            p_clone.current_pointer = 0;
+            p_clone.accumulator = 0;
+            p_clone.instructions[*t.0] = new_instruction;
 
-        if p_clone.run_program() {
-            Some(p_clone)
-        }else{
-            None
-        }
-    }).find_any(|_| true).unwrap();
+            if p_clone.run_program() {
+                Some(p_clone)
+            } else {
+                None
+            }
+        })
+        .find_any(|_| true)
+        .unwrap();
 
     x.accumulator
 }
-
-
