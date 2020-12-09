@@ -5,9 +5,9 @@ use rayon::prelude::*;
 
 #[derive(Debug, Clone, PartialOrd, PartialEq)]
 pub enum Instructions {
-    acc(isize),
-    jmp(isize),
-    nop(isize),
+    ACC(isize),
+    JMP(isize),
+    NOP(isize),
 }
 
 impl FromStr for Instructions {
@@ -16,9 +16,9 @@ impl FromStr for Instructions {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let splits = s.split(' ').try_collect::<[&str; 2]>().unwrap();
         Ok(match splits[0] {
-            "acc" => Self::acc(splits[1].parse().unwrap()),
-            "jmp" => Self::jmp(splits[1].parse().unwrap()),
-            "nop" => Self::nop(splits[1].parse().unwrap()),
+            "acc" => Self::ACC(splits[1].parse().unwrap()),
+            "jmp" => Self::JMP(splits[1].parse().unwrap()),
+            "nop" => Self::NOP(splits[1].parse().unwrap()),
             _ => {
                 panic!()
             }
@@ -38,15 +38,15 @@ impl Program {
     pub fn step_once(&mut self) {
         let current_instruction = &self.instructions[self.current_pointer];
         match current_instruction {
-            Instructions::acc(i) => {
+            Instructions::ACC(i) => {
                 self.accumulator += i;
                 self.current_pointer += 1;
             }
-            Instructions::jmp(i) => {
+            Instructions::JMP(i) => {
                 let next_pointer: isize = self.current_pointer as isize + i;
                 self.current_pointer = next_pointer as usize;
             }
-            Instructions::nop(_) => {
+            Instructions::NOP(_) => {
                 self.current_pointer += 1;
             }
         }
@@ -99,8 +99,8 @@ pub fn solve_part_2(input: &Program) -> isize {
 
     for t in &prg.trace {
         let new_instruction = match t.1 {
-            Instructions::jmp(i) => Instructions::nop(*i),
-            Instructions::nop(i) => Instructions::jmp(*i),
+            Instructions::JMP(i) => Instructions::NOP(*i),
+            Instructions::NOP(i) => Instructions::JMP(*i),
             _ => continue,
         };
 
@@ -125,15 +125,15 @@ pub fn solve_part_2_rayon(input: &Program) -> isize {
 
     let x = prg.trace.iter().filter(|f|{
        match f.1 {
-           Instructions::acc(_) => {
+           Instructions::ACC(_) => {
                false
            }
            _ => {true}
        }
     }).collect::<Vec<(&usize, &Instructions)>>().into_par_iter().filter_map(|t|{
         let new_instruction = match t.1 {
-            Instructions::jmp(i) => Instructions::nop(*i),
-            Instructions::nop(i) => Instructions::jmp(*i),
+            Instructions::JMP(i) => Instructions::NOP(*i),
+            Instructions::NOP(i) => Instructions::JMP(*i),
             _ => {panic!()},
         };
 

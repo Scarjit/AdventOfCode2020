@@ -1,6 +1,6 @@
 use pathfinding::directed::topological_sort::topological_sort;
 use regex::Regex;
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 
 type Bags = HashMap<String, Vec<InnerBag>>;
 
