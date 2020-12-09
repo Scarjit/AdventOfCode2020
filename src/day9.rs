@@ -68,4 +68,5 @@ pub fn solve_part_1(input: &XMASData) -> usize {
 pub fn solve_part_2(input: &XMASData) -> isize {
     let mut input_clone = input.clone();
     let x = input_clone.check_seq_validity();
+    0
 }
