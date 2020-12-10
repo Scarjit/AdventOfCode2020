@@ -44,7 +44,7 @@ impl XMASData {
         0
     }
 
-    pub fn check_weakness(&mut self, search_val: usize) -> usize{
+    pub fn check_weakness(&mut self, search_val: usize) -> usize {
         let numbers = &self.data;
         let mut window_low: usize = 0;
         let mut window_high: usize = 1;
