@@ -105,7 +105,7 @@ impl Ship {
             L(v) => match v {
                 90 | 180 | 270 => {
                     let n = (v / 90isize) as usize;
-                    for i in 0..n {
+                    for _i in 0..n {
                         let current_y = self.waypoint.y;
                         self.waypoint.y = self.waypoint.x;
                         self.waypoint.x = -current_y;
@@ -118,7 +118,7 @@ impl Ship {
             R(v) => match v {
                 90 | 180 | 270 => {
                     let n = (v / 90isize) as usize;
-                    for i in 0..n {
+                    for _i in 0..n {
                         let current_x = self.waypoint.x;
                         self.waypoint.x = self.waypoint.y;
                         self.waypoint.y = -current_x;
